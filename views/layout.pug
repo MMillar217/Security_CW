@@ -1,0 +1,47 @@
+doctype html
+html
+    head
+        title Safari Security
+        link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+        link(rel='stylesheet' href='/css/style.css')
+        script(src='https://www.google.com/recaptcha/api.js', async='', defer='')
+    body
+        nav.navbar.navbar-expand-md.navbar-dark.bg-dark.mb-4
+            a.navbar-brand(href='/') SSTS
+            button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarCollapse', aria-controls='navbarCollapse', aria-expanded='false', aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            #navbarCollapse.collapse.navbar-collapse
+                ul.navbar-nav.mr-auto
+                    li.nav-item
+                        a.nav-link(href='/')
+                            | Home 
+                            span.sr-only (current)
+                    if user
+                        li.nav-item
+                            a.nav-link(href='/tickets/create') Create Ticket
+                        if user.role == "Admin"
+                            li.nav-item
+                            a.nav-link(href='/admin-control') Administration
+                ul.nav.navbar-nav.navbar-right
+                    if user
+                        li.nav-item.dropdown
+                            a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') #{user.username}
+                                .dropdown-menu(aria-labelledby='navbarDropdown')
+                                    a.dropdown-item(href='/users/logout') Logout
+                    else
+                        li.nav-item
+                            a.nav-link(href='/users/register') Register
+                        li.nav-item
+                            a.nav-link(href='/users/login') Login
+                
+            br
+        .container
+            != messages('message', locals)
+            block content
+            br
+            hr
+            footer
+                p Marc Millar S1828600 - Secure Software Development - Coursework
+        script(src='/bower_components/jquery/dist/jquery.js')
+        script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+        script(src='/js/main.js')

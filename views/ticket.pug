@@ -1,0 +1,60 @@
+extends layout
+//- block content from layout.pug
+block content
+    
+    .card.w-100
+        .card-title
+            h3= ticket.title
+        .card-body
+            hr
+            p2= ticket.description
+            hr
+            p1 Bug found by: #{foundBy} (#{unameFoundBy})
+            br
+            p1 Assigned To: #{assignedTo} (#{unameAssignedTo})
+            br
+            p1 Priority: #{ticket.priority}
+            br
+            p1 Status: #{ticket.status}
+            br
+            p1 Type: #{ticket.type}
+            hr
+            p1 Posted: #{ticket.timeStamp}
+        .card-footer
+            if user.id == ticket.foundBy || user.role == "Admin"
+                hr
+                a.btn.btn-primary(href='/ticket/edit/' + ticket._id) Update
+                a.btn.float-right.btn-primary.delete-ticket(href='#', tic-id=ticket._id) Delete
+    //-add comment
+    if ticket.status != "Closed"
+        .card.w-100
+            .card-title
+                h5 Add A Comment
+            .card-body
+                form(method='POST', action='/ticket/:id')
+                    #form-group
+                        input.form-control(name='ticketId', type='hidden', value=ticket._id)
+                    #form-group
+                        input.form-control(name='tTitle', type='hidden', value=ticket.title)
+                    #form-group
+                            textarea.form-control(name='comment', maxlength='200', placeholder="Share your thought...")
+                    hr
+                    input.btn.btn-primary(type='submit', value='Comment')
+    .row
+        h5 Comments
+        .col-12
+            ul.list-group
+                    each comment, i in comments
+                        each cuser, i in cusers
+                            if comment.ticketId == ticket._id && cuser._id == comment.postedBy
+                                li.list-group-item
+                                    b #{cuser.username}
+                                    p= comment.content
+                                    hr
+                                    p #{comment.timeStamp}
+                                    if user.id == ticket.foundBy || user.role == "Admin" || user.id == comment.postedBy
+                                        hr
+                                        a.btn.btn-primary.delete-comment(href='#', com-id=comment._id) Delete
+    
+
+                    

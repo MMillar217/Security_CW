@@ -1,0 +1,26 @@
+extends layout
+//- block content from layout.pug
+block content
+    h2 #{title}
+    .col-12
+        .card
+            .card-body
+                form(method='POST', action='/users/register')
+                    #form-group
+                        label (*)Name:
+                        input.form-control(name='name', type='text', maxlength='20')
+                    #form-group
+                        label (*)Role:
+                        select(name='role')
+                            option(value='Developer') Developer
+                            option(value='Tester') Tester
+                            option(value='Client') Client
+                    #form-group
+                        label (*)Username:
+                        input.form-control(name='username', type='text', maxlength='15')
+                    #form-group
+                        label (*)Password:
+                        input.form-control(name='password', type='password', maxlength='12')
+                    hr
+                    input.btn.btn-primary(type='submit', value='Register')
+                    br

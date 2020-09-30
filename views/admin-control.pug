@@ -1,0 +1,107 @@
+extends layout
+//- block content from layout.pug
+block content
+    h2 #{title}
+    .container
+        .row
+            .card.w-50
+                .card-title
+                    h4 Create Team
+                .card-body
+                    form(method='POST', action='/admin-control')
+                        #form-group
+                            label Team Name:
+                            input.form-control(name='teamName', id='teamName', type='text', maxlength='20', placeholder="Team Name")
+                        hr
+                        input.btn.btn-primary(type='submit', value='Create Team')
+            .card.w-50
+                .card-title
+                    h4 Teams
+                .card-body
+                    each ateam, i in ateams
+                        button.collapsible(type='button')=ateam.teamName
+                        .content
+                            .col-12
+                                ul.list-group
+                                    each vuser, i in vusers
+                                        if vuser.teamId == ateam._id
+                                            li.list-group-item
+                                                a(href='/admin-control/user/' + vuser._id)=vuser.username
+                                                p= vuser.name
+                                                hr
+                                                if vuser.approved == 'true'
+                                                    p1 APPROVED
+                                                if vuser.approved == 'false'
+                                                    p1 NOT APPROVED
+                                                //- p1 Approved? 
+                                                //- p= vuser.approved
+    hr
+    button.collapsible(type='button') Approved Users
+    .content
+        .col-12
+            ul.list-group
+                each vuser, i in vusers
+                    if vuser.approved == "true"
+                        li.list-group-item
+                            a(href='/admin-control/user/' + vuser._id)=vuser.username
+                            p= vuser.name
+                            hr
+                            p1 Approved? 
+                            p= vuser.approved
+    button.collapsible(type='button') Unapproved Users
+    .content
+        .col-12
+            ul.list-group
+                each vuser, i in vusers
+                    if vuser.approved == "false"
+                        li.list-group-item
+                            a(href='/admin-control/user/' + vuser._id)=vuser.username
+                            p= vuser.name
+                            hr
+                            p1 Approved? 
+                            p= vuser.approved
+    style.
+        .collapsible {
+        background-color: #777;
+        color: white;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        }
+        .active, .collapsible:hover {
+        background-color: #555;
+        }
+        .collapsible:after {
+        content: '\002B';
+        color: white;
+        font-weight: bold;
+        float: right;
+        margin-left: 5px;
+        }
+        .active:after {
+        content: "\2212";
+        }
+        .content {
+        padding: 0 18px;
+        display: none;
+        overflow: hidden;
+        background-color: #f1f1f1;
+        }
+    script.
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }

@@ -1,0 +1,263 @@
+extends layout
+//- block content from layout.pug
+block content
+    if user.approved != "true"
+            p Please contact admin regarding the approval of your account
+    else
+        .accordion
+            .row
+                .card.w-50
+                    .card-title
+                        h3 Safari Security Testing Services
+                    .card-body
+                        h5 Welcome!
+                        p This is a bug tracking application for Safari Security Testing Services.
+                        p Each time a bug is discovered, users can create a ticket providing the following details:
+                        ul
+                            li Ticket title
+                            li Description
+                            li Who the bug is assigned to
+                            li Priority level
+                            li Type
+                        p Each ticket starts off with the status 'Open', and a timestamp of when the ticket was created is stored.
+                        p Users are able to select tickets relevant to them below, where they can add comments, and edit the details of the ticket if they are authorised to do so.
+                .card.w-50
+                    .card-title
+                        each uteam, i in uteams
+                            if user.teamId == uteam._id
+                                h3= uteam.teamName
+                    .card-body
+                        if user.teamId != null
+                            ul.list-group
+                                each ouser, i in ousers
+                                    if ouser.teamId == user.teamId
+                                        li.list-group-item
+                                            p #{ouser.name}(#{ouser.username}), #{ouser.role}
+                                            
+        hr
+        h2 #{title}
+        button.collapsible(type='button') Tickets Created By You
+        .content
+            .row
+                .col-4
+                    button.collapsible(type='button') Open
+                    .content
+                        ul.list-group
+                            each ticket, i in tickets
+                                if user._id == ticket.foundBy
+                                    if ticket.status == "Open"
+                                        li.list-group-item
+                                            a(href='/ticket/' + ticket._id)=ticket.title
+                                            p= ticket.description
+                                            p Status: #{ticket.status}
+                                            p Type: #{ticket.type}
+                                            if ticket.priority == "High"
+                                                b.text-danger Priority: High
+                                            if ticket.priority == "Medium"
+                                                b.text-warning Priority: Medium
+                                            if ticket.priority == "Low"
+                                                b.text-success Priority: Low
+                                    
+                .col-4
+                    button.collapsible(type='button') Resolved
+                    .content
+                        ul.list-group
+                            each ticket, i in tickets
+                                if user._id == ticket.foundBy
+                                    if ticket.status == "Resolved"
+                                        li.list-group-item
+                                            a(href='/ticket/' + ticket._id)=ticket.title
+                                            p= ticket.description
+                                            p Status: #{ticket.status}
+                                            p Type: #{ticket.type}
+                                            if ticket.priority == "High"
+                                                b.text-danger Priority: High
+                                            if ticket.priority == "Medium"
+                                                b.text-warning Priority: Medium
+                                            if ticket.priority == "Low"
+                                                b.text-success Priority: Low
+                .col-4
+                    button.collapsible(type='button') Closed
+                    .content
+                        ul.list-group
+                            each ticket, i in tickets
+                                if user._id == ticket.foundBy
+                                    if ticket.status == "Closed"
+                                        li.list-group-item
+                                            a(href='/ticket/' + ticket._id)=ticket.title
+                                            p= ticket.description
+                                            p Status: #{ticket.status}
+                                            p Type: #{ticket.type}
+                                            if ticket.priority == "High"
+                                                b.text-danger Priority: High
+                                            if ticket.priority == "Medium"
+                                                b.text-warning Priority: Medium
+                                            if ticket.priority == "Low"
+                                                b.text-success Priority: Low
+
+        button.collapsible(type='button') Tickets Assigned To You
+        .content
+            .row
+                .col-4
+                    button.collapsible(type='button') Open
+                    .content
+                        ul.list-group
+                            each ticket, i in tickets
+                                if user._id == ticket.assignedTo && ticket.status == "Open"
+                                    li.list-group-item
+                                        a(href='/ticket/' + ticket._id)=ticket.title
+                                        p= ticket.description
+                                        p Status: #{ticket.status}
+                                        p Type: #{ticket.type}
+                                        if ticket.priority == "High"
+                                            b.text-danger Priority: High
+                                        if ticket.priority == "Medium"
+                                            b.text-warning Priority: Medium
+                                        if ticket.priority == "Low"
+                                            b.text-success Priority: Low
+                .col-4
+                    button.collapsible(type='button') Resolved
+                    .content
+                        ul.list-group
+                            each ticket, i in tickets
+                                if user._id == ticket.assignedTo && ticket.status == "Resolved"
+                                    li.list-group-item
+                                        a(href='/ticket/' + ticket._id)=ticket.title
+                                        p= ticket.description
+                                        p Status: #{ticket.status}
+                                        p Type: #{ticket.type}
+                                        if ticket.priority == "High"
+                                            b.text-danger Priority: High
+                                        if ticket.priority == "Medium"
+                                            b.text-warning Priority: Medium
+                                        if ticket.priority == "Low"
+                                            b.text-success Priority: Low
+                .col-4
+                    button.collapsible(type='button') Closed
+                    .content
+                        ul.list-group
+                            each ticket, i in tickets
+                                if user._id == ticket.assignedTo && ticket.status == "Closed"
+                                    li.list-group-item
+                                        a(href='/ticket/' + ticket._id)=ticket.title
+                                        p= ticket.description
+                                        p Status: #{ticket.status}
+                                        p Type: #{ticket.type}
+                                        if ticket.priority == "High"
+                                            b.text-danger Priority: High
+                                        if ticket.priority == "Medium"
+                                            b.text-warning Priority: Medium
+                                        if ticket.priority == "Low"
+                                            b.text-success Priority: Low
+        if user.role == "Admin"
+            button.collapsible(type='button') All Tickets (Admin)
+            .content
+                .row
+                    .col-4
+                        button.collapsible(type='button') Open
+                        .content
+                            ul.list-group
+                                each ticket, i in tickets
+                                        if ticket.status == "Open"
+                                            li.list-group-item
+                                                a(href='/ticket/' + ticket._id)=ticket.title
+                                                p= ticket.description
+                                                p Status: #{ticket.status}
+                                                p Type: #{ticket.type}
+                                                if ticket.priority == "High"
+                                                    b.text-danger Priority: High
+                                                if ticket.priority == "Medium"
+                                                    b.text-warning Priority: Medium
+                                                if ticket.priority == "Low"
+                                                    b.text-success Priority: Low
+                                        
+                    .col-4
+                        button.collapsible(type='button') Resolved
+                        .content
+                            ul.list-group
+                                each ticket, i in tickets
+                                        if ticket.status == "Resolved"
+                                            li.list-group-item
+                                                a(href='/ticket/' + ticket._id)=ticket.title
+                                                p= ticket.description
+                                                p Status: #{ticket.status}
+                                                p Type: #{ticket.type}
+                                                if ticket.priority == "High"
+                                                    b.text-danger Priority: High
+                                                if ticket.priority == "Medium"
+                                                    b.text-warning Priority: Medium
+                                                if ticket.priority == "Low"
+                                                    b.text-success Priority: Low
+                    .col-4
+                        button.collapsible(type='button') Closed
+                        .content
+                            ul.list-group
+                                each ticket, i in tickets
+                                        if ticket.status == "Closed"
+                                            li.list-group-item
+                                                a(href='/ticket/' + ticket._id)=ticket.title
+                                                p= ticket.description
+                                                p Status: #{ticket.status}
+                                                p Type: #{ticket.type}
+                                                if ticket.priority == "High"
+                                                    b.text-danger Priority: High
+                                                if ticket.priority == "Medium"
+                                                    b.text-warning Priority: Medium
+                                                if ticket.priority == "Low"
+                                                    b.text-success Priority: Low
+    style.
+        .collapsible {
+        background-color: #777;
+        color: white;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: #f6ff00;
+        text-align: left;
+        outline: #f6ff00;
+        font-size: 15px;
+        }
+        .active{
+        background-color: #7300a8
+        }
+        .collapsible:hover {
+        background-color: #02007a;
+        }
+        .collapsible:after {
+        content: '\002B';
+        color: white;
+        font-weight: bold;
+        float: right;
+        margin-left: 5px;
+        }
+
+        .active:after {
+        content: "\2212";
+        }
+        .content {
+        padding: 0 18px;
+        display: none;
+        overflow: hidden;
+        background-color: #f1f1f1;
+        }
+        
+    script.
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+
+        
+                    
+                    
+           
+

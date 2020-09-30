@@ -1,0 +1,33 @@
+extends layout
+//- block content from layout.pug
+block content
+    h2 #{title}
+    form(method='POST', action='/admin-control/user/' + user._id)
+        #form-group
+            label (*)Name:
+            input.form-control(name='name', type='text' disabled=true, value=user.name)
+        #form-group
+            label (*)Role:
+            select(name='role' disabled=true, value=user.role)
+                option(value='Developer') Developer
+                option(value='Tester') Tester
+                option(value='Client') Client
+                option(value='Admin') Admin
+        #form-group
+            label (*)Username:
+            input.form-control(name='username', type='text' disabled=true value=user.username)
+        #form-group
+            label Approved?
+            select(name='approved' value=user.approved)
+                option(value='true') True
+                option(value='false') False
+        #form-group
+            label Team:
+            select(name='team')
+                each auteam, i in auteams
+                    option(value=auteam._id) #{auteam.teamName}
+        hr
+        input.btn.btn-primary(type='submit', value='Update')
+        br
+            //-form(method='POST', action='/admin-control/user/' + user._id)
+
